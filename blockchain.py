@@ -18,6 +18,8 @@ def hash_block(block):
 
 def get_balance(participant):
     tx_sender = [[tx['amount'] for tx in block['transactions'] if tx['sender'] == participant] for block in blockchain]
+    open_tx_sender = [tx['amount'] for tx in open_transactions if tx['sender'] == participant]
+    tx_sender.append(open_tx_sender)
     amount_sent = 0
     for tx in tx_sender:
         if len(tx) > 0:
@@ -37,6 +39,11 @@ def get_last_blockchain_value():
     return blockchain[-1]
 
 
+def verify_transaction(transaction):
+    sender_balance = get_balance(transaction['sender'])
+    return sender_balance >= transaction['amount']
+
+
 def add_transaction(recipient, sender=owner, amount=1.0):
     """ Append a new value as well as the last blockchain value, to the blockchain.
 
@@ -50,9 +57,12 @@ def add_transaction(recipient, sender=owner, amount=1.0):
         'recipient': recipient,
         'amount': amount
     }
-    open_transactions.append(transaction)
-    participants.add(sender)
-    participants.add(recipient)
+    if verify_transaction(transaction):
+        open_transactions.append(transaction)
+        participants.add(sender)
+        participants.add(recipient)
+        return True
+    return False
 
 
 def mine_block():
@@ -105,6 +115,8 @@ def verify_chain():
 
 waiting_for_input = True
 
+# A while loop for the user input interface
+# It's a loop that exits once waiting_for_input becomes False or when break is called
 while waiting_for_input:
     print('Please choose')
     print('1: Add a new transaction value')
@@ -119,7 +131,10 @@ while waiting_for_input:
         # unpack the tuple
         recipient, amount = tx_data
         # add the transaction to the blockchain
-        add_transaction(recipient, amount=amount)
+        if add_transaction(recipient, amount=amount):
+            print('Added transaction!')
+        else:
+            print('Transaction failed!')
         print(open_transactions)
     elif user_choice == '2':
         if mine_block():
@@ -129,6 +144,7 @@ while waiting_for_input:
     elif user_choice == '4':
         print(participants)
     elif user_choice == 'h':
+        # h is "hack." Make sure that you don't try to hack the blockchain if it's empty
         if len(blockchain) >= 1:
             blockchain[0] = {
                 'previous_hash': '',
@@ -140,6 +156,7 @@ while waiting_for_input:
                 }]
             }
     elif user_choice == 'q':
+        # q is "quit," which will exit the loop
         waiting_for_input = False
     else:
         print('Input was invalid, please pick a value from the list!')

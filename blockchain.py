@@ -1,5 +1,6 @@
 from functools import reduce
 from collections import OrderedDict
+import json
 
 from hash_util import hash_string_256, hash_block
 
@@ -27,8 +28,31 @@ def load_data():
         file_content = f.readlines()
         global blockchain
         global open_transactions
-        blockchain = file_content[0]
-        open_transactions = file_content[1]
+        blockchain = json.loads(file_content[0][:-1])
+        updated_blockchain = []
+        for block in blockchain:
+            updated_block = {
+                'previous_hash': block['previous_hash'],
+                'index': block['index'],
+                'proof': block['proof'],
+                'transactions': [OrderedDict([
+                    ('sender', tx['sender']),
+                    ('recipient', tx['recipient']),
+                    ('amount', tx['amount'])
+                ]) for tx in block['transactions']]
+            }
+            updated_blockchain.append(updated_block)
+        blockchain = updated_blockchain
+        open_transactions = json.loads(file_content[1])
+        updated_transactions = []
+        for tx in open_transactions:
+            updated_transaction = OrderedDict([
+                ('sender', tx['sender']),
+                ('recipient', tx['recipient']),
+                ('amount', tx['amount'])
+            ])
+            updated_transactions.append(updated_transaction)
+        open_transactions = updated_transactions
 
 
 load_data()
@@ -36,13 +60,14 @@ load_data()
 
 def save_data():
     with open('blockchain.txt', mode='w') as f:
-        f.write(str(blockchain))
+        f.write(json.dumps(blockchain))
         f.write('\n')
-        f.write(str(open_transactions))
+        f.write(json.dumps(open_transactions))
 
 
 def valid_proof(transactions, last_hash, proof):
     guess = (str(transactions) + str(last_hash) + str(proof)).encode()
+    print(guess)
     guess_hash = hash_string_256(guess)
     print(guess_hash)
     return guess_hash[0:2] == '00'
@@ -138,7 +163,6 @@ def mine_block():
         'proof': proof
     }
     blockchain.append(block)
-    save_data()
     return True
 
 
@@ -209,6 +233,7 @@ while waiting_for_input:
     elif user_choice == '2':
         if mine_block():
             open_transactions = []
+            save_data()
     elif user_choice == '3':
         print_blockchain_elements()
     elif user_choice == '4':

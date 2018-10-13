@@ -25,11 +25,13 @@ owner = 'Jet'
 participants = {'Jet'}
 
 def load_data():
+    """Initialize blockchain + open transactions data from a file."""
     with open('blockchain.txt', mode='r') as f:
         file_content = f.readlines()
         global blockchain
         global open_transactions
         blockchain = json.loads(file_content[0][:-1])
+        # We need to convert  the loaded data because Transactions should use OrderedDict
         updated_blockchain = []
         for block in blockchain:
             updated_block = {
@@ -45,6 +47,7 @@ def load_data():
             updated_blockchain.append(updated_block)
         blockchain = updated_blockchain
         open_transactions = json.loads(file_content[1])
+        # We need to convert  the loaded data because Transactions should use OrderedDict
         updated_transactions = []
         for tx in open_transactions:
             updated_transaction = OrderedDict([
@@ -67,6 +70,7 @@ load_data()
 
 
 def save_data():
+    """Save blockchain + open transactions snapshot to a file."""
     with open('blockchain.txt', mode='w') as f:
         f.write(json.dumps(blockchain))
         f.write('\n')
@@ -78,20 +82,35 @@ def save_data():
     #         'ot': open_transactions
     #     }
     #     f.write(pickle.dumps(save_data))
+    print('Saving failed!')
 
 
 def valid_proof(transactions, last_hash, proof):
+    """Validate a proof of work number and see if it solves the puzzle algorithm (two leading 0s)
+
+    Arguments:
+        :transactions: The transactions of the block for which the proof is created.
+        :last_hash: The previous block's hash which will be stored in the current block.
+        :proof: The proof number we're testing.
+    """
+    # Create a string with all the hash inputs
     guess = (str(transactions) + str(last_hash) + str(proof)).encode()
     print(guess)
+    # Hash the string
+    # IMPORTANT: This is NOT the same hash as will be stored in the previous_hash. It's a not a block's hash. It's only used for the proof-of-work algorithm.
     guess_hash = hash_string_256(guess)
     print(guess_hash)
+    # Only a hash (which is based on the above inputs) which starts with two 0s is treated as valid
+    # This condition is of course defined by you. You could also require 10 leading 0s - this would take significantly longer (and this allows you to control the speed at which new blocks can be added)
     return guess_hash[0:2] == '00'
 
 
 def proof_of_work():
+    """Generate a proof of work for the open transactions, the hash of the previous block and a random number (which is guessed until it fits)."""
     last_block = blockchain[-1]
     last_hash = hash_block(last_block)
     proof = 0
+    # Try different PoW numbers and return the first valid one
     while not valid_proof(open_transactions, last_hash, proof):
         proof += 1
     return proof
@@ -128,6 +147,11 @@ def get_last_blockchain_value():
 
 
 def verify_transaction(transaction):
+    """Verify a transaction by checking whether the sender has sufficient coins.
+
+    Arguments:
+        :transaction: The transaction that should be verified.
+    """
     sender_balance = get_balance(transaction['sender'])
     return sender_balance >= transaction['amount']
 
@@ -156,7 +180,7 @@ def add_transaction(recipient, sender=owner, amount=1.0):
 
 def mine_block():
     """Create a new block and add open transactions to it."""
-    # Fetch the currently last block of the blockchain
+    # Fetch the current last block of the blockchain
     last_block = blockchain[-1]
     # Hash the last block (=> to be able to compare it to the stored hash value)
     hashed_block = hash_block(last_block)
@@ -190,6 +214,7 @@ def get_transaction_value():
 
 
 def get_user_choice():
+    """Prompts the user for its choice and return it."""
     user_input = input('Your choice: ')
     return user_input
 
@@ -218,6 +243,7 @@ def verify_chain():
 
 
 def verify_transactions():
+    """Verifies all open transactions."""
     return all([verify_transaction(tx) for tx in open_transactions])
 
 

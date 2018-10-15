@@ -15,8 +15,7 @@ blockchain = []
 open_transactions = []
 # We are the owner of this blockchain node, hence this is our identifier (e.g. for sending coins)
 owner = 'Jet'
-# Registered participants: Ourself + other people sending/ receiving coins
-participants = {'Jet'}
+
 
 def load_data():
     """Initialize blockchain + open transactions data from a file."""
@@ -235,8 +234,7 @@ while waiting_for_input:
     print('1: Add a new transaction value')
     print('2: Mine a new block')
     print('3: Output the blockchain blocks')
-    print('4: Output participants')
-    print('5: Check transaction validity')
+    print('4: Check transaction validity')
     print('q: Quit')
     user_choice = get_user_choice()
     if user_choice == '1':
@@ -256,8 +254,6 @@ while waiting_for_input:
     elif user_choice == '3':
         print_blockchain_elements()
     elif user_choice == '4':
-        print(participants)
-    elif user_choice == '5':
         if verify_transactions():
             print('All transactions are valid')
         else:

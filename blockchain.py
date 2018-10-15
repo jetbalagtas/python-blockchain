@@ -55,7 +55,7 @@ def load_data():
         #     global open_transactions
         #     blockchain = file_content['chain']
         #     open_transactions = file_content['ot']
-    except IOError:
+    except (IOError, IndexError):
         # Our starting block for the blockchain
         genesis_block = Block('', 0, [], 100, 0)
         # Initializing our (empty) blockchain list
@@ -73,7 +73,8 @@ def save_data():
     """Save blockchain + open transactions snapshot to a file."""
     try:
         with open('blockchain.txt', mode='w') as f:
-            f.write(json.dumps(blockchain))
+            saveable_chain = [block.__dict__ for block in blockchain]
+            f.write(json.dumps(saveable_chain))
             f.write('\n')
             f.write(json.dumps(open_transactions))
         # USING PICKLE:

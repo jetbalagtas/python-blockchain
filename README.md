@@ -24,4 +24,4 @@ This is a blockchain project written in Python.
 
 In the project directory, you can run this in the terminal:
 
-    `python blockchain.py`
+    `python node.py`

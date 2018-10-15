@@ -38,9 +38,9 @@ class Verification:
         Arguments:
             :transaction: The transaction that should be verified.
         """
-        sender_balance = get_balance(transaction.sender)
+        sender_balance = get_balance()
         return sender_balance >= transaction.amount
-        
+
 
     def verify_transactions(self, open_transactions, get_balance):
         """Verifies all open transactions."""

@@ -4,6 +4,12 @@ from blockchain import Blockchain
 from verification import Verification
 
 class Node:
+    """The node which runs the local blockchain instance.
+    
+    Attributes:
+        :id: The id of the node.
+        :blockchain: The blockchain which is run by this node.
+    """
     def __init__(self):
         # self.id = str(uuid4())
         self.id = 'JET'
@@ -27,7 +33,7 @@ class Node:
     def print_blockchain_elements(self):
         """ Output all blocks of the blockchain. """
         # Output the blockchain list to the console
-        for block in self.blockchain.get_chain():
+        for block in self.blockchain.chain:
             print('Outputting Block')
             print(block)
         else:
@@ -35,6 +41,7 @@ class Node:
 
 
     def listen_for_input(self):
+        """Starts the node and waits for user input."""
         waiting_for_input = True
         # A while loop for the user input interface
         # It's a loop that exits once waiting_for_input becomes False or when break is called
@@ -70,7 +77,7 @@ class Node:
                 waiting_for_input = False
             else:
                 print('Input was invalid, please pick a value from the list!')
-            if not Verification.verify_chain(self.blockchain.get_chain()):
+            if not Verification.verify_chain(self.blockchain.chain):
                 self.print_blockchain_elements()
                 print('Invalid blockchain!')
                 # Break out of the loop

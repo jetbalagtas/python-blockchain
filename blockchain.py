@@ -11,7 +11,15 @@ from verification import Verification
 MINING_REWARD = 10
 
 class Blockchain:
+    """The Blockchain class manages the chain of blocks as well as open transactions and the node on which it's running.
+    
+    Attributes:
+        :chain: The list of blocks
+        :open_transactions (private): The list of open transactions
+        :hosting_node: The connected node (which runs the blockchain).
+    """
     def __init__(self, hosting_node_id):
+        """The constructor of the Blockchain class."""
         # Our starting block for the blockchain
         genesis_block = Block('', 0, [], 100, 0)
         # Initializing our (empty) blockchain list
@@ -39,6 +47,7 @@ class Blockchain:
 
 
     def get_open_transactions(self):
+        """Returns a copy of the open transactions list."""
         return self.__open_transactions[:]
 
 

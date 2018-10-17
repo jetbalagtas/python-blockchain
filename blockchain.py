@@ -12,6 +12,9 @@ from transaction import Transaction
 # The reward given to miners for creating a new block
 MINING_REWARD = 10
 
+# prints the name of the file if it is import into another that is being executed
+print(__name__)
+
 class Blockchain:
     """The Blockchain class manages the chain of blocks as well as open transactions and the node on which it's running.
     

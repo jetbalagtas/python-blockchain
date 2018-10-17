@@ -90,5 +90,7 @@ class Node:
         print('Done!')
 
 
-node = Node()
-node.listen_for_input()
+# Check if we are running this file directly before executing it (in case the file is imported into another and that file is being directly executed)
+if __name__ == '__main__':
+    node = Node()
+    node.listen_for_input()

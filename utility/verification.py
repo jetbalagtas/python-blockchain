@@ -1,4 +1,4 @@
-from hash_util import hash_string_256, hash_block
+from utility.hash_util import hash_string_256, hash_block
 
 class Verification:
     """A helper class which offer various static and class-based verification and validation methods."""

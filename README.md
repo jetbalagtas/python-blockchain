@@ -26,8 +26,8 @@ In the project directory, you can run this in the terminal:
 
     `python node.py`
 
-### When running a virtual environment with Anaconda
+### Manage your Python virtual envs on per project basis with Anaconda. Then when running a that virtual env
 
-    `source ~/.bash_profile` first if you use zsh (no need if you already use/source `~/.bash_profile`)
+    `source ~/.bash_profile` first if you use zsh (no need if you already use/source `~/.bash_profile` -- the conda setup is there)
 
     `source activate <YOUR_ENVIRONMENT_NAME>`

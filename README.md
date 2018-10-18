@@ -6,7 +6,7 @@ This is a blockchain project written in Python.
 
         `python --version` or `python`
 
-3. If they don't match, put this in your `~/.bash_profile`
+3. If they don't match, put this in your `~/.bash_profile` or if you use zsh, `~/.zshrc`
 
         `alias python='python3'`
 
@@ -25,3 +25,9 @@ This is a blockchain project written in Python.
 In the project directory, you can run this in the terminal:
 
     `python node.py`
+
+### When running a virtual environment with Anaconda
+
+    `source ~/.bash_profile` first if you use zsh (no need if you already use/source `~/.bash_profile`)
+
+    `source activate <YOUR_ENVIRONMENT_NAME>`

@@ -26,8 +26,10 @@ In the project directory, you can run this in the terminal:
 
     `python node.py`
 
-### Manage your Python virtual envs on per project basis with Anaconda. Then when running a that virtual env
+### Manage 3rd party packages via Python-focused virtual envs on a per project basis with Anaconda. Then when running a virtual env:
 
-    `source ~/.bash_profile` first if you use zsh (no need if you already use/source `~/.bash_profile` -- the conda setup is there)
+    `source ~/.bash_profile`
+    
+    that is if you use zsh (no need if you already use/source `~/.bash_profile` -- when installed, Anaconda appends the conda setup script is there)
 
     `source activate <YOUR_ENVIRONMENT_NAME>`

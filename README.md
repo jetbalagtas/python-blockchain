@@ -36,5 +36,5 @@ In the project directory, you can run this in the terminal:
 
 #### 3rd party packages used by this app (and managed with Anaconda): ####
   - PyCrypto
-  - Flask and all the packages it depends on
+  - Flask and all the packages it depends on **(use Postman to test and manipulate data)**
   - CORS (flask-cors)

@@ -33,3 +33,8 @@ In the project directory, you can run this in the terminal:
     that is if you use zsh (no need if you already use/source `~/.bash_profile` -- when installed, Anaconda appends the conda setup script is there)
 
     `source activate <YOUR_ENVIRONMENT_NAME>`
+
+#### 3rd party packages used by this app (and managed with Anaconda): ####
+  - PyCrypto
+  - Flask and all the packages it depends on
+  - CORS (flask-cors)

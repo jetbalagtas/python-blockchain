@@ -1,0 +1,3 @@
+[{"index": "", "previous_hash": 0, "timestamp": 0, "transactions": [], "proof": 100}]
+[]
+["localhost:5002", "localhost:5001"]

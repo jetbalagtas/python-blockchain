@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="col text-right">
-                        <h2>Funds: {{ funds }}</h2>
+                        <h2>Funds: {{ funds.toFixed(2) }}</h2>
                     </div>
                 </div>
                 <hr>
@@ -224,49 +224,80 @@
                 methods: {
                     onCreateWallet: function () {
                         // Send Http request to create a new wallet (and return keys)
-                        var vm = this;
+                        var vm = this
+                        vm.walletLoading = true
                         axios.post('/wallet')
                         .then(response => {
                             vm.error = null;
                             vm.success = 'Created Wallet! Public Key: ' + response.data.public_key + ' Private Key: ' + response.data.private_key
+                            vm.wallet = {
+                                public_key: response.data.public_key,
+                                private_key: response.data.private_key
+                            }
+                            vm.funds = response.data.funds
+                            vm.walletLoading = false
                         })
                         .catch(error => {
                             vm.success = null;
-                            vm.error = error.data.message
+                            vm.error = error.response.data.message
+                            vm.wallet = null
+                            vm.walletLoading = false
                         });
                     },
                     onLoadWallet: function () {
                         // Send Http request to load an existing wallet (from a file on the server)
-                        if (Math.random() > 0.5) {
-                            this.error = null
-                            this.success = 'Successfully stored transaction!';
-                            this.wallet = { private_key: 'fsde2523tfasg234twfg24qafew', public_key: '532fsdarf23rf' };
-                        } else {
-                            this.success = null;
-                            this.error = 'Something went wrong!';
-                            this.wallet = null;
-                        }
+                        var vm = this
+                        vm.walletLoading = true
+                        axios.get('/wallet')
+                        .then(response => {
+                            vm.error = null
+                            vm.success = 'Loaded Wallet! Public Key: ' + response.data.public_key + ' Private Key: ' + response.data.private_key
+                            vm.wallet = {
+                                public_key: response.data.public_key,
+                                private_key: response.data.private_key
+                            }
+                            vm.funds = response.data.funds
+                            vm.walletLoading = false
+                        })
+                        .catch(error => {
+                            vm.success = null
+                            vm.error = error.response.data.message
+                            vm.wallet = null
+                            vm.walletLoading = false
+                        })
                     },
                     onSendTx: function () {
                         // Send Transaction to backend
-                        if (Math.random() > 0.5) {
-                            this.error = null
-                            this.success = 'Successfully stored transaction!'
-                            this.funds = this.funds - this.outgoingTx.amount
-                        } else {
-                            this.success = null;
-                            this.error = 'Something went wrong!'
-                        }
+                        var vm = this
+                        vm.txLoading = true
+                        axios.post('/transaction', {
+                            recipient: vm.outgoingTx.recipient,
+                            amount: vm.outgoingTx.amount
+                        })
+                        .then(response => {
+                            vm.error = null
+                            vm.success = response.data.message
+                            vm.funds = response.data.funds
+                            vm.txLoading = false
+                        })
+                        .catch(error => {
+                            vm.success = null
+                            vm.error = error.response.data.message
+                            vm.txLoading = false
+                        })
                     },
                     onMine: function() {
-                        if (Math.random() > 0.5) {
-                            this.error = null
-                            this.success = 'Successfully mined coins!'
-                            this.funds = this.funds + 10
-                        } else {
-                            this.success = null;
-                            this.error = 'Something went wrong!'
-                        }
+                        var vm = this
+                        axios.post('/mine')
+                        .then(response => {
+                            vm.error = null
+                            vm.success = response.data.message
+                            vm.funds = response.data.funds
+                        })
+                        .catch(error => {
+                            vm.success = null
+                            vm.error = error.response.data.message
+                        })
                     },
                     onLoadData: function () {
                         if (this.view === 'chain') {
@@ -288,7 +319,6 @@
                             vm.dataLoading = true;
                             axios.get('/transactions')
                             .then(response => {
-                                console.log(response);
                                 vm.openTransactions = response.data;
                                 vm.dataLoading = false;
                             })

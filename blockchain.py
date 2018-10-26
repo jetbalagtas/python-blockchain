@@ -33,9 +33,9 @@ class Blockchain:
         self.chain = [genesis_block] # self.chain property for use with getter and setter below
         # Unhandled transactions
         self.__open_transactions = []
-        self.load_data()
         self.hosting_node = hosting_node_id
         self.__peer_nodes = set()
+        self.load_data()
 
     
     # def get_chain(self): # used for self.__chain attribute

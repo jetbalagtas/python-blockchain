@@ -11,8 +11,13 @@ CORS(app)
 
 
 @app.route('/', methods=['GET'])
-def get_ui():
+def get_node_ui():
     return send_from_directory('ui', 'node.html')
+
+
+@app.route('/network', methods=['GET'])
+def get_network_ui():
+    return send_from_directory('ui', 'network.html')
 
 
 @app.route('/wallet', methods=['POST'])

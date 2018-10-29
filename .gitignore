@@ -2,5 +2,5 @@
 __pycache__/
 *.pyc
 blockchain.p
-wallet.txt
+*.txt
 .DS_Store

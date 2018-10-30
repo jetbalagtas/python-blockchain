@@ -178,7 +178,7 @@ class Blockchain:
                 for node in self.__peer_nodes:
                     url = 'http://{}/broadcast-transaction'.format(node)
                     try:
-                        response = requests.post(url, json={'sender': sender, 'recipient': recipient, 'amount': amount, 'signature': signature})
+                        response = requests.post(url, json={'sender': sender, 'recipient': recipient, 'signature': signature, 'amount': amount})
                         if response.status_code == 400 or response.status_code == 500:
                             print('Transaction declined, needs resolving.')
                             return False

@@ -51,3 +51,4 @@ If you use zsh:
   - PyCrypto
   - Flask and all the packages it depends on **(use Postman to test and manipulate data)**
   - CORS (flask-cors)
+  - requests

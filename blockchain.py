@@ -28,7 +28,7 @@ class Blockchain:
     def __init__(self, public_key, node_id):
         """The constructor of the Blockchain class."""
         # Our starting block for the blockchain
-        genesis_block = Block('', 0, [], 100, 0)
+        genesis_block = Block(0, '', [], 100, 0)
         # Initializing our (empty) blockchain list
         # self.__chain = [genesis_block] # self.__chain as a "private" attribute
         self.chain = [genesis_block] # self.chain property for use with getter and setter below
@@ -168,8 +168,8 @@ class Blockchain:
             :recipient: The recipient of the coins.
             :amount: The amount of coins with the transaction (default = 1.0)
         """
-        if self.public_key == None:
-            return False
+        # if self.public_key == None:
+        #     return False
         transaction = Transaction(sender, recipient, signature, amount)
         if Verification.verify_transaction(transaction, self.get_balance):
             self.__open_transactions.append(transaction)
@@ -246,7 +246,7 @@ class Blockchain:
 
 
     def remove_peer_node(self, node):
-        """Removes a new node to the peer node set.
+        """Removes a node from the peer node set.
 
         Arguments:
             :node: The node URL which should be removed.
